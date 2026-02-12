@@ -1,0 +1,164 @@
+{
+    "hospital_info": {
+      "name": "Black Lion Specialized Hospital (Tikur Anbessa)",
+      "location": "Addis Ababa, Ethiopia",
+      "affiliation": "College of Health Sciences, Addis Ababa University",
+      "type": "Tertiary referral, teaching and research hospital",
+      "capacity": "Approximately 1,000 beds",
+      "languages": ["Amharic", "English"],
+      "contact_numbers": ["+251 11 551 1211", "+251 11 551 1216"],
+      "address": "Queen Elizabeth II Street, Addis Ababa, Ethiopia"
+    },
+  
+    "departments_and_services": [
+      {
+        "department": "Internal Medicine",
+        "specialties": ["Cardiology", "Gastroenterology", "Endocrinology", "Pulmonology"],
+        "contact_extension": "240"
+      },
+      {
+        "department": "Surgery",
+        "specialties": ["General Surgery", "Cardiothoracic Surgery", "Neurosurgery", "Orthopedics"],
+        "location": "Surgical building, second floor"
+      },
+      {
+        "department": "Pediatrics and Child Health",
+        "specialties": ["Neonatal care", "Child cardiology", "Chronic diseases"],
+        "location": "Pediatric wing",
+        "contact_extension": "360"
+      },
+      {
+        "department": "Obstetrics and Gynecology",
+        "services": ["Maternity care", "Fetal medicine", "Family planning"],
+        "location": "Women’s Health Unit"
+      },
+      {
+        "department": "Emergency Department",
+        "services": ["24/7 trauma care", "Critical care"],
+        "contact_number": "+251 11 551 3640",
+        "availability": "24/7"
+      },
+      {
+        "department": "Radiology",
+        "services": ["X-ray", "MRI", "CT scan", "Ultrasound"],
+        "location": "Near main reception"
+      },
+      {
+        "department": "Laboratory Services",
+        "services": ["Pathology", "Microbiology", "Hematology"],
+        "location": "Central lab, ground floor"
+      },
+      {
+        "department": "Oncology and Radiotherapy Center",
+        "services": ["Chemotherapy", "Radiotherapy", "Palliative care"],
+        "location": "National Oncology Center, Tikur Anbessa campus"
+      },
+      {
+        "department": "Dental and Oral Surgery",
+        "services": ["Oral maxillofacial surgery", "Prosthodontics"],
+        "location": "Dentistry sub-building"
+      },
+      {
+        "department": "Pharmacy",
+        "services": ["Inpatient drug dispensing", "Outpatient drug dispensing"],
+        "location": "Ground floor, outpatient block"
+      }
+    ],
+  
+    "doctors_and_staff": [
+      {
+        "name": "Dr. Dawit Wondimagegn",
+        "department": "Psychiatry",
+        "expertise": "Public mental health and ethics",
+        "consultation_days": ["Tuesday morning", "Thursday morning"]
+      },
+      {
+        "name": "Dr. Senait Feleke",
+        "department": "Pediatrics",
+        "expertise": "Pediatric hematology-oncology",
+        "consultation_days": ["Monday morning", "Wednesday morning"]
+      },
+      {
+        "name": "Dr. Tesfaye Kebede",
+        "department": "Surgery",
+        "expertise": "Cardiothoracic surgery",
+        "consultation_days": ["Monday", "Wednesday", "Friday"]
+      },
+      {
+        "name": "Dr. Wubayehu Tadesse",
+        "department": "Radiology",
+        "expertise": "Diagnostic imaging and MRI interpretation",
+        "consultation_days": ["Weekdays"]
+      },
+      {
+        "name": "Dr. Muluemebet Worku",
+        "department": "Obstetrics and Gynecology",
+        "expertise": "Maternal-fetal medicine",
+        "consultation_days": ["Monday to Friday mornings"]
+      },
+      {
+        "name": "Dr. Henok Abebe",
+        "department": "Internal Medicine",
+        "expertise": "Gastroenterology",
+        "consultation_days": ["Tuesday afternoon", "Thursday afternoon"]
+      }
+    ],
+  
+    "working_hours": {
+      "outpatient_departments": "8:30 AM to 4:30 PM, Monday to Friday",
+      "emergency_department": "24/7 service"
+    },
+  
+    "appointments": {
+      "booking_process": "Visit outpatient registration desk in person. Present patient ID or national ID. Choose department and obtain appointment slip. Payment processed at cashier before consultation.",
+      "required_documents": [
+        "National ID or hospital patient card",
+        "Referral letter if available",
+        "Previous medical records for follow-up visits",
+        "Insurance card for approved schemes"
+      ],
+      "cancellation_policy": "Must be done at least 24 hours before appointment at registration desk. No refund if missed or cancellation not made in time."
+    },
+  
+    "pre_visit_instructions": {
+      "blood_tests": "Fast for 8 to 12 hours before glucose or lipid profile tests. Water only allowed.",
+      "abdominal_ultrasound": "Avoid food or drink for at least 6 hours prior. Full bladder may be required for pelvic scans.",
+      "general_checkup": "Bring list of ongoing medications. Wear comfortable clothing.",
+      "surgery": "Follow doctor's fasting and medication discontinuation instructions. Arrange post-operation transport.",
+      "radiology": "Remove jewelry and metal items. Report allergies such as contrast dye.",
+      "insurance": "Approved insurers include Ethiopian Insurance Corporation, Nyala, United, and others. Bring policy documentation."
+    },
+  
+    "pharmacy_information": {
+      "location": "Ground floor, outpatient building",
+      "operating_hours": "8:30 AM to 5:00 PM, Monday to Friday",
+      "emergency_pharmacy": "Open 24/7",
+      "services": [
+        "Dispensing hospital-prescribed medications",
+        "Over-the-counter essentials (pain relievers, antiseptics, vitamins)",
+        "Patient counseling on dosage, side effects, and adherence"
+      ],
+      "note": "No prescriptions issued without doctor evaluation. Valid hospital card required for collection."
+    },
+  
+    "emergency_and_support": {
+      "emergency_room_phone": "+251 11 551 3640",
+      "ambulance_service": {
+        "short_code": "939",
+        "direct_number": "+251 11 551 4018"
+      },
+      "on_call_medical_officer": "Available every shift through ER reception",
+      "patient_support_desk": {
+        "phone": "+251 11 551 1211",
+        "extension": "214",
+        "services": "Complaint resolution and patient guidance"
+      },
+      "security_and_lost_found": "Ground floor security office, open 24/7"
+    },
+  
+    "additional_notes": {
+      "teaching_facility": "Services may involve supervised medical students",
+      "international_patients": "Bring passport and translated medical history if possible",
+      "covid19_protocols": "Masks and entrance screening may apply for vulnerable patients"
+    }
+  }
