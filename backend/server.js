@@ -1,54 +1,52 @@
+// backend/server.js
+console.log("Server starting...");
+
+// Load environment variables
+require("dotenv").config({ path: __dirname + "/.env" });
+
+// Debug: check if env variables are loaded
+console.log("MONGO_URI:", process.env.MONGO_URI);
+console.log("PORT:", process.env.PORT);
+
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require ("cors");
-require("dotenv").config();
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const { Pinecone } = require("@pinecone-database/pinecone");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const app = express();
 app.use(cors());
-app.use(express.json());
-// link to mongodb
-mongoose.connect(process.env.MONGO_URI)
-    .then(()=> console.log("MongoDB connected"))
-    .catch(err => console.error(err));
-const authRoutes = require("./routes/auth");
-app.use("/api/auth", authRoutes);
-const PORT = process.env.PORT || 5000;
-app.listen(PORT,()=> console.log(`Server running on port ${PORT}`))
-
-// backend/server.js
-import express from "express";
-import bodyParser from "body-parser";
-import dotenv from "dotenv";
-import OpenAI from "openai";
-import { Pinecone } from "@pinecone-database/pinecone";
-
-dotenv.config(); // Load environment variables from .env
-
-const app = express();
 app.use(bodyParser.json());
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// ✅ MongoDB connection (no deprecated options)
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => console.error("❌ MongoDB error:", err));
+// Auth routes
+const authRoutes = require("./routes/auth");
+app.use("/api/auth", authRoutes);
+
+// Initialize Gemini
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const chatModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const embedModel = genAI.getGenerativeModel({ model: "text-embedding-004" });
 
 // Initialize Pinecone
 const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY,
+  environment: process.env.PINECONE_ENVIRONMENT,
 });
-const index = pinecone.Index("hospital-chatbot");
+const index = pinecone.index(process.env.PINECONE_INDEX_NAME);
 
 // Chat endpoint
 app.post("/api/chat", async (req, res) => {
   try {
     const userMessage = req.body.message;
 
-    // Step 1: Embed user query
-    const embeddingResponse = await openai.embeddings.create({
-      model: "text-embedding-ada-002",
-      input: userMessage,
-    });
-    const queryEmbedding = embeddingResponse.data[0].embedding;
+    // Step 1: Embed user query with Gemini
+    const embeddingResponse = await embedModel.embedContent(userMessage);
+    const queryEmbedding = embeddingResponse.embedding.values;
 
     // Step 2: Search Pinecone for relevant hospital docs
     const searchResults = await index.query({
@@ -61,21 +59,18 @@ app.post("/api/chat", async (req, res) => {
       .map((m) => m.metadata.text)
       .join("\n");
 
-    // Step 3: Send query + context to GPT
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are Merkuze, a hospital assistant. Use hospital documents to answer clearly. If unsure, recommend contacting a doctor.",
-        },
-        { role: "user", content: userMessage },
-        { role: "assistant", content: `Relevant hospital info:\n${context}` },
-      ],
-    });
+    // Step 3: Generate answer with Gemini
+    const prompt = `
+    You are Merkuze, a hospital assistant. Use hospital documents to answer clearly.
+    If unsure, recommend contacting a doctor.
 
-    const answer = completion.choices[0].message.content;
+    User question: ${userMessage}
+    Relevant hospital info: ${context}
+    `;
+
+    const result = await chatModel.generateContent(prompt);
+    const answer = result.response.text();
+
     res.json({ answer });
   } catch (error) {
     console.error("Error in /api/chat:", error);
@@ -83,5 +78,6 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-app.listen(3001, () => console.log("Backend running on port 3001"));
-
+// Start server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`🚀 Backend running on port ${PORT}`));

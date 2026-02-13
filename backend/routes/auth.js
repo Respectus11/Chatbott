@@ -8,11 +8,26 @@ const router = express.Router();
 // Signup
 router.post("/signup", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      role: role || "user" // default to "user" if not provided
+    });
+
     await newUser.save();
-    res.json({ message: "User created successfully" });
+
+    // Return token immediately after signup
+    const token = jwt.sign(
+      { id: newUser._id, role: newUser.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token, role: newUser.role });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -28,8 +43,13 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.json({ token });
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token, role: user.role });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
