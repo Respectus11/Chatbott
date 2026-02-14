@@ -1,80 +1,73 @@
 // backend/server.js
 console.log("Server starting...");
 
-// Load environment variables
-require("dotenv").config({ path: __dirname + "/.env" });
-
-// Debug: check if env variables are loaded
-console.log("MONGO_URI:", process.env.MONGO_URI);
-console.log("PORT:", process.env.PORT);
+require("dotenv").config({ path: __dirname + '/.env' });
 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { Pinecone } = require("@pinecone-database/pinecone");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { pipeline } = require("@xenova/transformers");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ✅ MongoDB connection (no deprecated options)
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch(err => console.error("❌ MongoDB error:", err));
+
 // Auth routes
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
-// Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const chatModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-const embedModel = genAI.getGenerativeModel({ model: "text-embedding-004" });
+// Chat routes (using Ollama)
+const chatRoutes = require("./routes/chat");
+app.use("/api/chat", chatRoutes);
 
-// Initialize Pinecone
-const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY,
-  environment: process.env.PINECONE_ENVIRONMENT,
-});
-const index = pinecone.index(process.env.PINECONE_INDEX_NAME);
+// Admin routes (protected - upload documents)
+const adminRoutes = require("./routes/admin");
+app.use("/api/admin", adminRoutes);
 
-// Chat endpoint
-app.post("/api/chat", async (req, res) => {
+// Load Hugging Face models (for embedding if needed)
+let embedder;
+(async () => {
   try {
-    const userMessage = req.body.message;
+    embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+    console.log("✅ Multilingual embedding model loaded");
+  } catch (err) {
+    console.error("⚠️ Error loading embedding model:", err.message);
+  }
+})();
 
-    // Step 1: Embed user query with Gemini
-    const embeddingResponse = await embedModel.embedContent(userMessage);
-    const queryEmbedding = embeddingResponse.embedding.values;
+// Helper function to get embeddings
+async function getEmbedding(text) {
+  if (!embedder) throw new Error("Embedder not initialized yet");
+  const output = await embedder(text);
+  const embeddings = output.tolist()[0]; // token embeddings
 
-    // Step 2: Search Pinecone for relevant hospital docs
-    const searchResults = await index.query({
-      vector: queryEmbedding,
-      topK: 5,
-      includeMetadata: true,
+  const meanVector = new Array(embeddings[0].length).fill(0);
+  embeddings.forEach(tokenVec => {
+    tokenVec.forEach((val, i) => {
+      meanVector[i] += val;
     });
+  });
+  return meanVector.map(val => val / embeddings.length);
+}
 
-    const context = searchResults.matches
-      .map((m) => m.metadata.text)
-      .join("\n");
-
-    // Step 3: Generate answer with Gemini
-    const prompt = `
-    You are Merkuze, a hospital assistant. Use hospital documents to answer clearly.
-    If unsure, recommend contacting a doctor.
-
-    User question: ${userMessage}
-    Relevant hospital info: ${context}
-    `;
-
-    const result = await chatModel.generateContent(prompt);
-    const answer = result.response.text();
-
-    res.json({ answer });
-  } catch (error) {
-    console.error("Error in /api/chat:", error);
-    res.status(500).json({ error: "Something went wrong" });
+// Test endpoint
+app.get("/api/test", async (req, res) => {
+  try {
+    const sampleText = "እንዴት ነህ? Hello world!";
+    if (!embedder) {
+      return res.json({ message: "Embedding model not loaded yet" });
+    }
+    const embedding = await getEmbedding(sampleText);
+    res.json({ length: embedding.length, preview: embedding.slice(0, 10) });
+  } catch (err) {
+    console.error("Embedding test error:", err);
+    res.status(500).json({ error: "Embedding not responding" });
   }
 });
 
