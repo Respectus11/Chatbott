@@ -15,8 +15,8 @@ app.use(bodyParser.json());
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch(err => console.error("❌ MongoDB error:", err));
+  .then(() => console.log("[OK] MongoDB connected"))
+  .catch(err => console.error("[ERROR] MongoDB error:", err));
 
 // Auth routes
 const authRoutes = require("./routes/auth");
@@ -35,9 +35,9 @@ let embedder;
 (async () => {
   try {
     embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
-    console.log("✅ Multilingual embedding model loaded");
+    console.log("[OK] Multilingual embedding model loaded");
   } catch (err) {
-    console.error("⚠️ Error loading embedding model:", err.message);
+    console.error("[WARNING] Error loading embedding model:", err.message);
   }
 })();
 
@@ -73,4 +73,4 @@ app.get("/api/test", async (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`🚀 Backend running on port ${PORT}`));
+app.listen(PORT, () => console.log(`[SERVER] Backend running on port ${PORT}`));

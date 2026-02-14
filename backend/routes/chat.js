@@ -50,7 +50,7 @@ PHARMACY: ${data.pharmacy_information.location}
 EMERGENCY CONTACT: ${data.emergency_and_support.emergency_room_phone}
 `;
   
-  console.log("✅ Hospital data loaded for Ollama");
+  console.log("[OK] Hospital data loaded for Ollama");
 } catch (err) {
   console.error("Error:", err);
 }

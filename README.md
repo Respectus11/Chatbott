@@ -21,18 +21,21 @@ Merkuze (ምርኩዜ) is an intelligent hospital assistant that helps users nav
 ## Features
 
 ### AI-Powered Conversations
+
 - Powered by Ollama with gemma:3.1b model
 - Retrieval-Augmented Generation (RAG) for accurate hospital information
 - Multilingual support (English and Amharic)
 - Natural and context-aware responses
 
 ### User Authentication
+
 - Secure signup and login with JWT tokens
 - Password hashing with bcrypt
 - Role-based access control (User/Admin)
 - Session persistence
 
 ### Chat Features
+
 - Real-time chat interface
 - Chat history storage and retrieval
 - Start new conversations
@@ -40,11 +43,13 @@ Merkuze (ምርኩዜ) is an intelligent hospital assistant that helps users nav
 - Typing indicators for better UX
 
 ### Admin Dashboard
+
 - Document upload for knowledge base enhancement
 - Manage uploaded documents
 - Admin-only access control
 
 ### User Experience
+
 - Modern and responsive interface
 - Floating chat widget on landing page
 - Smooth animations and transitions
@@ -53,6 +58,7 @@ Merkuze (ምርኩዜ) is an intelligent hospital assistant that helps users nav
 ### Backend scheme
 
 ## Technologies
+
 - **Runtime**: Node.js
 - **Framework**: Express.js
 - **Database**: MongoDB
@@ -62,12 +68,14 @@ Merkuze (ምርኩዜ) is an intelligent hospital assistant that helps users nav
 - **AI Integration**: Ollama (gemma:3.1b)
 
 ### Frontend
+
 - **Framework**: React
 - **Routing**: React Router
 - **Styling**: CSS3
 - **HTTP Client**: Fetch API
 
 ### Infrastructure
+
 - **Local AI**: Ollama (running on localhost:11434)
 - **Vector Storage**: MongoDB for document storage
 
@@ -116,26 +124,29 @@ landing page/
 ## API Endpoints
 
 ### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/signup` | Register new user |
-| POST | `/api/auth/login` | Login user |
+
+| Method | Endpoint           | Description       |
+| ------ | ------------------ | ----------------- |
+| POST   | `/api/auth/signup` | Register new user |
+| POST   | `/api/auth/login`  | Login user        |
 
 ### Chat
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/chat` | Send message to AI |
-| GET | `/api/chat/history` | Get user's chat history |
-| POST | `/api/chat/new` | Create new chat |
-| GET | `/api/chat/:chatId` | Load specific chat |
-| POST | `/api/chat/:chatId/message` | Save message to chat |
+
+| Method | Endpoint                    | Description             |
+| ------ | --------------------------- | ----------------------- |
+| POST   | `/api/chat`                 | Send message to AI      |
+| GET    | `/api/chat/history`         | Get user's chat history |
+| POST   | `/api/chat/new`             | Create new chat         |
+| GET    | `/api/chat/:chatId`         | Load specific chat      |
+| POST   | `/api/chat/:chatId/message` | Save message to chat    |
 
 ### Admin
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/admin/documents` | List uploaded documents |
-| POST | `/api/admin/upload` | Upload document |
-| DELETE | `/api/admin/documents/:id` | Delete document |
+
+| Method | Endpoint                   | Description             |
+| ------ | -------------------------- | ----------------------- |
+| GET    | `/api/admin/documents`     | List uploaded documents |
+| POST   | `/api/admin/upload`        | Upload document         |
+| DELETE | `/api/admin/documents/:id` | Delete document         |
 
 ## Getting Started
 
@@ -148,18 +159,21 @@ landing page/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Respectus11/Chatbott.git
    cd Chatbott
    ```
 
 2. **Install backend dependencies**
+
    ```bash
    cd backend
    npm install
    ```
 
 3. **Install frontend dependencies**
+
    ```bash
    cd frontend
    npm install
@@ -168,6 +182,7 @@ landing page/
 4. **Set up environment variables**
 
    Create a `.env` file in the `backend` directory:
+
    ```env
    PORT=4000
    MONGO_URI=mongodb://localhost:27017/merkuze
@@ -175,6 +190,7 @@ landing page/
    ```
 
 5. **Start Ollama**
+
    ```bash
    # Make sure Ollama is running with gemma:3.1b model
    ollama serve
@@ -182,18 +198,21 @@ landing page/
    ```
 
 6. **Start MongoDB**
+
    ```bash
    # If using local MongoDB
    mongod
    ```
 
 7. **Run the backend**
+
    ```bash
    cd backend
    npm start
    ```
 
 8. **Run the frontend**
+
    ```bash
    cd frontend
    npm start
@@ -207,11 +226,11 @@ landing page/
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| PORT | Server port | 4000 |
-| MONGO_URI | MongoDB connection string | mongodb://localhost:27017/merkuze |
-| JWT_SECRET | Secret key for JWT | - |
+| Variable   | Description               | Default                           |
+| ---------- | ------------------------- | --------------------------------- |
+| PORT       | Server port               | 4000                              |
+| MONGO_URI  | MongoDB connection string | mongodb://localhost:27017/merkuze |
+| JWT_SECRET | Secret key for JWT        | -                                 |
 
 ### Ollama Configuration
 
@@ -220,21 +239,31 @@ The chatbot uses the gemma:3.1b model. Ensure Ollama is running on `http://local
 ## Demo Screenshots
 
 ### Landing Page
+
 ![Landing Page](images/Screenshot%202026-02-14%20185620.png)
 
-### Chat Widget
+### more on landing page 1
+
 ![Chat Widget](images/Screenshot%202026-02-14%20185644.png)
 
-### Login Page
+### more on landing page 2
+
 ![Login Page](images/Screenshot%202026-02-14%20185658.png)
 
+### Login Page
+
+![Login Page](images/Screenshot%202026-02-14%20185707.png)
+
 ### Signup Page
+
 ![Signup Page](images/Screenshot%202026-02-14%20185720.png)
 
 ### Chat Interface
+
 ![Chat Interface](images/Screenshot%202026-02-14%20185902.png)
 
 ### Admin Page
+
 ![Admin Page](images/Screenshot%202026-02-14%20191217.png)
 
 ## Future Enhancements
@@ -252,7 +281,6 @@ This project is for educational purposes.
 
 - Tikur Anbessa Specialized Hospital for the hospital data
 - Ollama for the local AI infrastructure
-- React and Node.js communities
 
 ---
 

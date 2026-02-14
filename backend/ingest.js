@@ -39,7 +39,7 @@ async function getOrCreateIndex() {
           }
         }
       });
-      console.log("✅ Index created successfully");
+      console.log(" Index created successfully");
     } else {
       console.log(`Found existing index: ${process.env.PINECONE_INDEX_NAME} (dimension: ${existingIndex.dimension})`);
       console.log(`Deleting existing index and creating new one: ${newIndexName}`);
@@ -56,12 +56,12 @@ async function getOrCreateIndex() {
           }
         }
       });
-      console.log("✅ New index created with correct dimension");
+      console.log("[OK] New index created with correct dimension");
     }
     
     return pinecone.index(newIndexName);
   } catch (err) {
-    console.error("❌ Error with index:", err);
+    console.error("[ERROR] Error with index:", err);
     throw err;
   }
 }
@@ -73,7 +73,7 @@ async function main() {
     const index = await getOrCreateIndex();
     
     // Load embedding model
-    console.log("✅ Embedding model loaded");
+    console.log("[OK] Embedding model loaded");
     const embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
 
     // Load dataset
@@ -196,12 +196,12 @@ async function main() {
         }
       });
 
-      console.log(`✅ Ingested: ${chunk.id} (${i + 1}/${textChunks.length})`);
+      console.log(`[OK] Ingested: ${chunk.id} (${i + 1}/${textChunks.length})`);
     }
 
-    console.log("🎉 All chunks ingested into Pinecone!");
+    console.log("[OK] All chunks ingested into Pinecone!");
   } catch (err) {
-    console.error("❌ Error during ingestion:", err);
+    console.error("[ERROR] Error during ingestion:", err);
   }
 }
 
